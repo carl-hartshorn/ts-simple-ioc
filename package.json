@@ -1,0 +1,36 @@
+{
+  "name": "ts-simple-ioc",
+  "description": "Simple TypeScript based IoC framework",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "lint": "tslint --project ./tsconfig.json",
+    "lint:fix": "tslint --project ./tsconfig.json --fix",
+    "build": "tsc --build ./src/tsconfig.json",
+    "test": "ts-node ./node_modules/jasmine/bin/jasmine --config=jasmine.json"
+  },
+  "keywords": [
+    "TypeScript",
+    "ts",
+    "IoC",
+    "dependency",
+    "injection",
+    "DI"
+  ],
+  "author": "Carl Hartshorn",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/carl-hartshorn/ts-simple-ioc.git"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^3.4.0",
+    "jasmine": "^3.4.0",
+    "ts-lint": "^4.5.1",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.3"
+  },
+  "files": [
+    "lib/"
+  ]
+}
