@@ -12,32 +12,40 @@ resources:
 trigger:
   - master
 
+pr: none
+
 steps:
   - task: Npm@1
+    displayName: 'npm ci'
     inputs:
       command: 'ci'
 
   - task: Npm@1
+    displayName: 'npm run lint'
     inputs:
       command: 'custom'
       customCommand: 'run lint'
 
   - task: Npm@1
+    displayName: 'npm test'
     inputs:
       command: 'custom'
       customCommand: 'test'
 
   - task: Npm@1
+    displayName: 'npm run build'
     inputs:
       command: 'custom'
       customCommand: 'run build'
       
   - task: Npm@1
+    displayName: 'npm set version to build number'
     inputs:
       command: 'custom'
       customCommand: 'version $(Build.BuildNumber) --no-git-tag-version'
 
   - task: Npm@1
+    displayName: 'npm publish'
     inputs:
-      command: 'custom'
-      customCommand: 'publish'
+      command: 'publish'
+      publishEndpoint: 'carl-hartshorn npm'
