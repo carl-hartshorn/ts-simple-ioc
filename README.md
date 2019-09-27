@@ -2,6 +2,8 @@
 
 A simple IoC container for TypeScript, strongly influenced by [Microsoft.Extensions.DependencyInjection](https://github.com/aspnet/Extensions/tree/master/src/DependencyInjection).
 
+[![Build Status](https://dev.azure.com/carlhartshorn/ts-simple-ioc/_apis/build/status/carl-hartshorn.ts-simple-ioc?branchName=master)](https://dev.azure.com/carlhartshorn/ts-simple-ioc/_build/latest?definitionId=2&branchName=master)
+
 ## Features
 
 - Simple service registration & resolution
