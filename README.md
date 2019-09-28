@@ -34,11 +34,11 @@ class ExampleService {
 class ExampleDependency {}
 
 const container = new Container()
-    .AddTransient(ExampleService, resolve => new ExampleService(resolve(ExampleDependency)))
-    .AddSingleton(ExampleDependency, () => new ExampleDependency())
-    .BeginResolution();
+    .addTransient(ExampleService, (resolve) => new ExampleService(resolve(ExampleDependency)))
+    .addSingleton(ExampleDependency, () => new ExampleDependency())
+    .beginResolution();
 
-const service = container.Resolve(ExampleService);
+const service = container.resolve(ExampleService);
 ```
 
 ## Roadmap

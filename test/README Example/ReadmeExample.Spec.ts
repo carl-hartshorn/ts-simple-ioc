@@ -5,11 +5,11 @@ import ExampleService from "./ExampleService";
 describe("README example", () => {
     it("should be valid.", () => {
         const container = new Container()
-            .AddTransient(ExampleService, (resolve) => new ExampleService(resolve(ExampleDependency)))
-            .AddSingleton(ExampleDependency, () => new ExampleDependency())
-            .BeginResolution();
+            .addTransient(ExampleService, (resolve) => new ExampleService(resolve(ExampleDependency)))
+            .addSingleton(ExampleDependency, () => new ExampleDependency())
+            .beginResolution();
 
-        const service = container.Resolve(ExampleService);
+        const service = container.resolve(ExampleService);
 
         expect(service).not.toBeNull();
         expect(service).not.toBeUndefined();

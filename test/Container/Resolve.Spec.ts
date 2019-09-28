@@ -4,29 +4,29 @@ import TestServiceWithConstructorDependency from "../TestServiceWithConstructorD
 import TestServiceWithPropertyDependency from "../TestServiceWithPropertyDependency";
 
 describe("Container", () => {
-    describe("Resolve", () => {
+    describe("resolve", () => {
         it("should throw when resolution has not yet begun.", () => {
             const container = new Container();
-            container.AddSingleton(TestService, () => new TestService());
+            container.addSingleton(TestService, () => new TestService());
 
-            expect(() => container.Resolve(TestService))
+            expect(() => container.resolve(TestService))
                 .toThrowError(
                     "Resolution has not yet begun - " +
-                    "did you forget to call BeginResolution on the container?");
+                    "did you forget to call beginResolution on the container?");
         });
 
         it("should throw when no registration exists for the requested service.", () => {
-            const container = new Container().BeginResolution();
+            const container = new Container().beginResolution();
 
-            expect(() => container.Resolve(TestService)).toThrowError("No registered TestService was found.");
+            expect(() => container.resolve(TestService)).toThrowError("No registered TestService was found.");
         });
 
         it("should return a registered singleton service.", () => {
             const container = new Container()
-                .AddSingleton<TestService>(TestService, () => new TestService())
-                .BeginResolution();
+                .addSingleton<TestService>(TestService, () => new TestService())
+                .beginResolution();
 
-            const resolved = container.Resolve(TestService);
+            const resolved = container.resolve(TestService);
             expect(resolved).not.toBeNull();
             expect(resolved).not.toBeUndefined();
             expect(resolved instanceof TestService).toBeTruthy();
@@ -35,10 +35,10 @@ describe("Container", () => {
         it("should return a registered singleton service instance.", () => {
             const testService = new TestService();
             const container = new Container()
-                .AddSingleton<TestService>(TestService, () => testService)
-                .BeginResolution();
+                .addSingleton<TestService>(TestService, () => testService)
+                .beginResolution();
 
-            const resolved = container.Resolve(TestService);
+            const resolved = container.resolve(TestService);
             expect(resolved).not.toBeNull();
             expect(resolved).not.toBeUndefined();
             expect(resolved instanceof TestService).toBeTruthy();
@@ -47,11 +47,11 @@ describe("Container", () => {
 
         it("should return the same instance when requesting a registered singleton service multiple times.", () => {
             const container = new Container()
-                .AddSingleton(TestService, () => new TestService())
-                .BeginResolution();
+                .addSingleton(TestService, () => new TestService())
+                .beginResolution();
 
-            const firstInstance = container.Resolve(TestService);
-            const secondInstance = container.Resolve(TestService);
+            const firstInstance = container.resolve(TestService);
+            const secondInstance = container.resolve(TestService);
             expect(firstInstance).toBe(secondInstance);
         });
 
@@ -60,12 +60,12 @@ describe("Container", () => {
             "service which has a dependency that has not been registered.",
             () => {
                 const container = new Container()
-                    .AddSingleton(
+                    .addSingleton(
                         TestServiceWithConstructorDependency,
                         (resolve) => new TestServiceWithConstructorDependency(resolve(TestService)))
-                    .BeginResolution();
+                    .beginResolution();
 
-                expect(() => container.Resolve(TestServiceWithConstructorDependency))
+                expect(() => container.resolve(TestServiceWithConstructorDependency))
                     .toThrowError(
                         "Could not resolve TestServiceWithConstructorDependency:" +
                         "\r\n- No registered TestService was found.");
@@ -76,13 +76,13 @@ describe("Container", () => {
             "service which has a dependency that has been registered but not as a singleton.",
             () => {
                 const container = new Container()
-                    .AddTransient(TestService, () => new TestService())
-                    .AddSingleton(
+                    .addTransient(TestService, () => new TestService())
+                    .addSingleton(
                         TestServiceWithConstructorDependency,
                         (resolve) => new TestServiceWithConstructorDependency(resolve(TestService)))
-                    .BeginResolution();
+                    .beginResolution();
 
-                expect(() => container.Resolve(TestServiceWithConstructorDependency))
+                expect(() => container.resolve(TestServiceWithConstructorDependency))
                     .toThrowError(
                         "Could not resolve TestServiceWithConstructorDependency:" +
                         "\r\n- Could not resolve TestService:" +
@@ -94,13 +94,13 @@ describe("Container", () => {
             "which has a dependency that has been registered as a singleton.",
             () => {
                 const container = new Container()
-                    .AddSingleton(TestService, () => new TestService())
-                    .AddSingleton(
+                    .addSingleton(TestService, () => new TestService())
+                    .addSingleton(
                         TestServiceWithConstructorDependency,
                         (resolve) => new TestServiceWithConstructorDependency(resolve(TestService)))
-                    .BeginResolution();
+                    .beginResolution();
 
-                const resolved = container.Resolve(TestServiceWithConstructorDependency);
+                const resolved = container.resolve(TestServiceWithConstructorDependency);
                 expect(resolved).not.toBeNull();
                 expect(resolved).not.toBeUndefined();
                 expect(resolved instanceof TestServiceWithConstructorDependency).toBeTruthy();
@@ -111,10 +111,10 @@ describe("Container", () => {
 
         it("should return a registered transient service.", () => {
             const container = new Container()
-                .AddTransient(TestService, () => new TestService())
-                .BeginResolution();
+                .addTransient(TestService, () => new TestService())
+                .beginResolution();
 
-            const resolved = container.Resolve(TestService);
+            const resolved = container.resolve(TestService);
             expect(resolved).not.toBeNull();
             expect(resolved).not.toBeUndefined();
             expect(resolved instanceof TestService).toBeTruthy();
@@ -122,11 +122,11 @@ describe("Container", () => {
 
         it("should not return the same instance when requesting a registered transient service multiple times.", () => {
             const container = new Container()
-                .AddTransient(TestService, () => new TestService())
-                .BeginResolution();
+                .addTransient(TestService, () => new TestService())
+                .beginResolution();
 
-            const firstInstance = container.Resolve(TestService);
-            const secondInstance = container.Resolve(TestService);
+            const firstInstance = container.resolve(TestService);
+            const secondInstance = container.resolve(TestService);
             expect(firstInstance).not.toBe(secondInstance);
         });
 
@@ -135,13 +135,13 @@ describe("Container", () => {
             "which has a dependency that has been registered as a singleton.",
             () => {
                 const container = new Container()
-                    .AddSingleton(TestService, () => new TestService())
-                    .AddTransient(
+                    .addSingleton(TestService, () => new TestService())
+                    .addTransient(
                         TestServiceWithConstructorDependency,
                         (resolve) => new TestServiceWithConstructorDependency(resolve(TestService)))
-                    .BeginResolution();
+                    .beginResolution();
 
-                const resolved = container.Resolve(TestServiceWithConstructorDependency);
+                const resolved = container.resolve(TestServiceWithConstructorDependency);
                 expect(resolved).not.toBeNull();
                 expect(resolved).not.toBeUndefined();
                 expect(resolved instanceof TestServiceWithConstructorDependency).toBeTruthy();
@@ -155,13 +155,13 @@ describe("Container", () => {
             "which has a dependency that has been registered as a transient.",
             () => {
                 const container = new Container()
-                    .AddTransient(TestService, () => new TestService())
-                    .AddTransient(
+                    .addTransient(TestService, () => new TestService())
+                    .addTransient(
                         TestServiceWithConstructorDependency,
                         (resolve) => new TestServiceWithConstructorDependency(resolve(TestService)))
-                    .BeginResolution();
+                    .beginResolution();
 
-                const resolved = container.Resolve(TestServiceWithConstructorDependency);
+                const resolved = container.resolve(TestServiceWithConstructorDependency);
                 expect(resolved).not.toBeNull();
                 expect(resolved).not.toBeUndefined();
                 expect(resolved instanceof TestServiceWithConstructorDependency).toBeTruthy();
@@ -172,17 +172,17 @@ describe("Container", () => {
 
         it("should return a registered singleton service which has a transient property dependency.", () => {
             const container = new Container()
-                .AddSingleton(TestService, () => new TestService())
-                .AddTransient(
+                .addSingleton(TestService, () => new TestService())
+                .addTransient(
                     TestServiceWithPropertyDependency,
                     (resolve) => {
                         const service = new TestServiceWithPropertyDependency();
                         service.testService = resolve(TestService);
                         return service;
                     })
-                .BeginResolution();
+                .beginResolution();
 
-            const resolved = container.Resolve(TestServiceWithPropertyDependency);
+            const resolved = container.resolve(TestServiceWithPropertyDependency);
             expect(resolved).not.toBeNull();
             expect(resolved).not.toBeUndefined();
             expect(resolved instanceof TestServiceWithPropertyDependency).toBeTruthy();

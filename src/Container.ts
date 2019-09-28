@@ -6,35 +6,35 @@ export default class Container {
     private serviceRegistrations: Array<ServiceRegistration<any>> = [];
     private hasBegunResolution: boolean = false;
 
-    public AddSingleton<TServiceToRegister>(
+    public addSingleton<TServiceToRegister>(
         type: { new(...args: any[]): TServiceToRegister },
         serviceFactory: ServiceFactory<TServiceToRegister>): Container {
-        this.AddRegistration(type, serviceFactory, ServiceLifetime.Singleton);
+        this.addRegistration(type, serviceFactory, ServiceLifetime.Singleton);
         return this;
     }
 
-    public AddTransient<TServiceToRegister>(
+    public addTransient<TServiceToRegister>(
         type: { new(...args: any[]): TServiceToRegister },
         serviceFactory: ServiceFactory<TServiceToRegister>): Container {
-        this.AddRegistration(type, serviceFactory, ServiceLifetime.Transient);
+        this.addRegistration(type, serviceFactory, ServiceLifetime.Transient);
         return this;
     }
 
-    public Resolve<TService>(resolutionType: { new(...args: any[]): TService }): TService {
-        return this.ResolveInternal(resolutionType, false);
+    public resolve<TService>(resolutionType: { new(...args: any[]): TService }): TService {
+        return this.resolveInternal(resolutionType, false);
     }
 
-    public BeginResolution(): Container {
+    public beginResolution(): Container {
         this.hasBegunResolution = true;
         return this;
     }
 
-    private ResolveInternal<TService>(
+    private resolveInternal<TService>(
         serviceType: { new(...args: any[]): TService },
         mustBeASingleton: boolean): TService {
 
         if (!this.hasBegunResolution) {
-            throw new Error("Resolution has not yet begun - did you forget to call BeginResolution on the container?");
+            throw new Error("Resolution has not yet begun - did you forget to call beginResolution on the container?");
         }
 
         const services = this.serviceRegistrations.filter((registration) => registration.type === serviceType);
@@ -51,10 +51,10 @@ export default class Container {
             }
 
             if (service.lifetime === ServiceLifetime.Singleton) {
-                return this.ResolveSingleton(serviceType, service);
+                return this.resolveSingleton(serviceType, service);
             }
 
-            return service.Resolve(this.Resolve.bind(this));
+            return service.resolve(this.resolve.bind(this));
         } catch (error) {
             throw new Error(
                 `Could not resolve ${(serviceType as any).name}:` +
@@ -62,7 +62,7 @@ export default class Container {
         }
     }
 
-    private AddRegistration<TServiceToRegister>(
+    private addRegistration<TServiceToRegister>(
         type: { new(...args: any[]): TServiceToRegister },
         serviceFactory: ServiceFactory<TServiceToRegister>,
         serviceLifetime: ServiceLifetime): void {
@@ -86,14 +86,14 @@ export default class Container {
             ));
     }
 
-    private ResolveSingleton<TService>(
+    private resolveSingleton<TService>(
         resolutionType: { new(...args: any[]): TService },
         serviceRegistration: ServiceRegistration<TService> | null = null): TService {
 
         if (serviceRegistration) {
-            return serviceRegistration.Resolve(this.ResolveSingleton.bind(this));
+            return serviceRegistration.resolve(this.resolveSingleton.bind(this));
         }
 
-        return this.ResolveInternal<TService>(resolutionType, true);
+        return this.resolveInternal<TService>(resolutionType, true);
     }
 }
