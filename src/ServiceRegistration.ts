@@ -10,7 +10,7 @@ export default class ServiceRegistration<TService> {
         private factory: ServiceFactory<TService>,
         public lifetime: ServiceLifetime) {}
 
-    public Resolve(serviceResolver: ServiceResolver): TService {
+    public resolve(serviceResolver: ServiceResolver): TService {
         if (!serviceResolver) {
             throw new Error("serviceResolver is required.");
         }
