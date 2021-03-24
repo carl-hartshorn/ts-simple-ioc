@@ -19,7 +19,7 @@ A simple IoC container for TypeScript, strongly influenced by [Microsoft.Extensi
 ### Installation
 
 ```bash
-$ npm install --save ts-simple-ioc
+npm install --save ts-simple-ioc
 ```
 
 ### Registering and resolving services
@@ -44,6 +44,6 @@ const service = container.resolve(ExampleService);
 ## Roadmap
 
 - v1.1.0
-    - Scoped lifetime support
+  - Scoped lifetime support
 - v1.2.0
-    - Circular dependency detection
+  - Circular dependency detection
