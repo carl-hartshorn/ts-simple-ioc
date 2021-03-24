@@ -10,19 +10,13 @@ resources:
 trigger: none
 
 pr:
-  - master
+  - main
 
 steps:
   - task: Npm@1
     displayName: 'npm ci'
     inputs:
       command: 'ci'
-
-  - task: Npm@1
-    displayName: 'npm run lint'
-    inputs:
-      command: 'custom'
-      customCommand: 'run lint'
 
   - task: Npm@1
     displayName: 'npm test'
