@@ -3,6 +3,9 @@ variables:
 
 name: $[format('PR - {0}', variables['prbuildnumber'])]
 
+pool:
+  vmImage: ubuntu-latest
+
 resources:
   - repo: self
     clean: true
