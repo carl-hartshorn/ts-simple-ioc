@@ -5,6 +5,9 @@ variables:
 
 name: $[format('{0}.{1}.{2}', variables['major'], variables['minor'], variables['patch'])]
 
+pool:
+  vmImage: ubuntu-latest
+
 resources:
   - repo: self
     clean: true
